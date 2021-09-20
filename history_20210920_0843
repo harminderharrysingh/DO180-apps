@@ -1,0 +1,31 @@
+    1  ls
+    2  free -h
+    3  vim config
+    4  git config --global credential.helper cache
+    5  ls
+    6  mv config token
+    7  cat token
+    8  git config --global credential.helper cache
+    9  ls
+   10  ls -a
+   11  cat .gitconfig 
+   12  ls
+   13  cat .gitconfig 
+   14  ping 8.8.8.8
+   15  git clone https://github.com/harminderharrysingh/DO180-apps.git
+   16  ls
+   17  cd DO180-apps/
+   18  ls
+   19  git status
+   20  git branch
+   21  git checkout -b testbranch
+   22  git branch
+   23  echo "Testing" > TEST
+   24  ls
+   25  git status
+   26  git add .
+   27  git status
+   28  git commit -am "Updated the repo with a new file"
+   29  git status
+   30  git push --set-upstream origin testbranch
+   31  history > history_20210920_0843
