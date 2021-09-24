@@ -1,0 +1,1116 @@
+[student@workstation ~]$ vi terminalOutput_001.txt
+[student@workstation ~]$ vi terminalOutput_002.txt
+[student@workstation ~]$ mv terminalOutput_00* 
+.ansible/               DO180-apps/             local/                  terminalOutput_001.txt
+.bash_logout            DO280/                  .mozilla/               terminalOutput_002.txt
+.bash_profile           Documents/              Music/                  token
+.bashrc                 Downloads/              .mysql_history          venv/
+.cache/                 .esd_auth               Pictures/               Videos/
+.config/                .gitconfig              .pki/                   .viminfo
+dbfiles/                .ICEauthority           Public/                 .vimrc
+Desktop/                .kube/                  .ssh/                   .vscode-oss/
+DO180/                  .local/                 Templates/              
+[student@workstation ~]$ mv terminalOutput_00* 
+.ansible/               DO180-apps/             local/                  terminalOutput_001.txt
+.bash_logout            DO280/                  .mozilla/               terminalOutput_002.txt
+.bash_profile           Documents/              Music/                  token
+.bashrc                 Downloads/              .mysql_history          venv/
+.cache/                 .esd_auth               Pictures/               Videos/
+.config/                .gitconfig              .pki/                   .viminfo
+dbfiles/                .ICEauthority           Public/                 .vimrc
+Desktop/                .kube/                  .ssh/                   .vscode-oss/
+DO180/                  .local/                 Templates/              
+[student@workstation ~]$ mv terminalOutput_00* DO180-apps/^C
+[student@workstation ~]$ mkdir DO180-apps/terminalOutput
+[student@workstation ~]$ mv terminalOutput_00* DO180-apps/terminalOutput/
+[student@workstation ~]$ cd DO180-apps/
+[student@workstation DO180-apps]$ ls
+example  nodejs-app  nodejs-helloworld  php-helloworld  README.md  temps  terminalOutput  todoapp
+[student@workstation DO180-apps]$ git show
+commit e93a6a3e8407dd2bcf99dbb3668ab64b4ab007e3 (HEAD -> s2i, origin/s2i)
+Author: Student User <student@workstation.lab.example.com>
+Date:   Wed Sep 22 05:54:07 2021 -0400
+
+    Changed index page contents.
+
+diff --git a/php-helloworld/index.php b/php-helloworld/index.php
+index ed39c9f..8edc82a 100644
+--- a/php-helloworld/index.php
++++ b/php-helloworld/index.php
+@@ -1,3 +1,4 @@
+ <?php
+ print "Hello, World! php version is " . PHP_VERSION . "\n";
++print "A change is a coming!\n";
+ ?>
+[student@workstation DO180-apps]$ git status
+On branch s2i
+Your branch is up to date with 'origin/s2i'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	terminalOutput/
+
+nothing added to commit but untracked files present (use "git add" to track)
+[student@workstation DO180-apps]$ git add terminalOutput/
+(failed reverse-i-search)`git commi': ^Ct add terminalOutput/
+[student@workstation DO180-apps]$ git status
+On branch s2i
+Your branch is up to date with 'origin/s2i'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   terminalOutput/terminalOutput_001.txt
+	new file:   terminalOutput/terminalOutput_002.txt
+
+[student@workstation DO180-apps]$ git branch
+  master
+* s2i
+  testbranch
+[student@workstation DO180-apps]$ git commit -m "terminal output"
+[s2i 63af47d] terminal output
+ 2 files changed, 4245 insertions(+)
+ create mode 100644 terminalOutput/terminalOutput_001.txt
+ create mode 100644 terminalOutput/terminalOutput_002.txt
+[student@workstation DO180-apps]$ git status
+On branch s2i
+Your branch is ahead of 'origin/s2i' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+[student@workstation DO180-apps]$ git push
+Username for 'https://github.com': harminderharrysingh
+Password for 'https://harminderharrysingh@github.com': 
+remote: Permission to harminderharrysingh/DO180-apps.git denied to hsingh-hw9.
+fatal: unable to access 'https://github.com/harminderharrysingh/DO180-apps.git/': The requested URL returned error: 403
+[student@workstation DO180-apps]$ cat ~/token 
+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
+[student@workstation DO180-apps]$ git push
+Username for 'https://github.com': harminderharrysingh
+Password for 'https://harminderharrysingh@github.com': 
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 69.41 KiB | 2.24 MiB/s, done.
+Total 5 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/harminderharrysingh/DO180-apps.git
+   e93a6a3..63af47d  s2i -> s2i
+[student@workstation DO180-apps]$ cd
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ lab network-sdn start
+
+Checking prerequisites for Guided Exercise: Troubleshooting OpenShift Software-Defined Networking
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'network-sdn' project is absent.........................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Troubleshooting OpenShift Software-Defined Networking
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ Preparing the student's workstation:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project network-sdn
+Now using project "network-sdn" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ cd ~/DO280/labs/network-sdn/
+[student@workstation network-sdn]$ ls
+db-data.sql  todo-db.yaml  todo-frontend.yaml
+[student@workstation network-sdn]$ oc create -f todo-db.yaml
+deployment.apps/mysql created
+service/mysql created
+[student@workstation network-sdn]$ oc status
+In project network-sdn on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.102.178:3306
+  deployment/mysql deploys registry.redhat.io/rhel8/mysql-80:1
+    deployment #1 running for 5 seconds - 1 pod
+
+
+1 info identified, use 'oc status --suggest' to see details.
+[student@workstation network-sdn]$ oc get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+mysql-5f9bdc6875-lnslp   1/1     Running   0          16s
+[student@workstation network-sdn]$ ocp cp db-data.sql mysql-5f9bdc6875-lnslp:/tmp/
+bash: ocp: command not found...
+[student@workstation network-sdn]$ oc cp db-data.sql mysql-5f9bdc6875-lnslp:/tmp/
+[student@workstation network-sdn]$ oc rsh mysql-5f9bdc6875-lnslp bash
+bash-4.4$ mysql -u root items < /tmp/db-data.sql 
+bash-4.4$ mysql -u root items -e "show tables;"
++-----------------+
+| Tables_in_items |
++-----------------+
+| Item            |
++-----------------+
+bash-4.4$ exit
+exit
+[student@workstation network-sdn]$ oc create -f todo-frontend.yaml
+deployment.apps/frontend created
+service/frontend created
+[student@workstation network-sdn]$ oc get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+frontend-5cbdf5bf85-zkwrt   0/1     ContainerCreating   0          5s
+mysql-5f9bdc6875-lnslp      1/1     Running             0          2m20s
+[student@workstation network-sdn]$ watch oc get pods
+[student@workstation network-sdn]$ oc expose service frontend --hostname todo.apps.ocp4.example.com
+route.route.openshift.io/frontend exposed
+[student@workstation network-sdn]$ oc get routes
+NAME       HOST/PORT                    PATH   SERVICES   PORT   TERMINATION   WILDCARD
+frontend   todo.apps.ocp4.example.com          frontend   8080                 None
+[student@workstation network-sdn]$ oc logs frontend -5cbdf5bf85-zkwrt
+Error: unknown shorthand flag: '5' in -5cbdf5bf85-zkwrt
+See 'oc logs --help' for usage.
+[student@workstation network-sdn]$ oc logs frontend-5cbdf5bf85-zkwrt
+App is ready at : 8080
+[student@workstation network-sdn]$ oc get service/mysql -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.102.178
+[student@workstation network-sdn]$ oc debug -t deployment/frontend
+Starting pod/frontend-debug ...
+Pod IP: 10.10.1.93
+If you don't see a command prompt, try pressing enter.
+sh-4.2$ 
+sh-4.2$ curl -v telnet://172.30.102.178:3306
+* About to connect() to 172.30.102.178 port 3306 (#0)
+*   Trying 172.30.102.178...
+* Connected to 172.30.102.178 (172.30.102.178) port 3306 (#0)
+J
+8.0.26
+* RCVD IAC 2
+* RCVD IAC 207
+^C
+sh-4.2$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get service/frontend -o jsonpath="{.spec.clusterIP}{'\n\}"
+error: error parsing jsonpath {.spec.clusterIP}{'\n\}, unterminated quoted string
+[student@workstation network-sdn]$ oc get service/frontend -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.106.169
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.94
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -m 10 -v http://172.30.106.169:8080
+* Rebuilt URL to: http://172.30.106.169:8080/
+*   Trying 172.30.106.169...
+* TCP_NODELAY set
+* Connection timed out after 10001 milliseconds
+* Closing connection 0
+curl: (28) Connection timed out after 10001 milliseconds
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get pods -o wide -l name=frontend
+NAME                        READY   STATUS    RESTARTS   AGE     IP          NODE       NOMINATED NODE   READINESS GATES
+frontend-5cbdf5bf85-zkwrt   1/1     Running   0          9m52s   10.8.0.92   master01   <none>           <none>
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.97
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ 
+Removing debug pod ...
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.98
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -v http://172.30.106.169:8080/todo
+*   Trying 172.30.106.169...
+* TCP_NODELAY set
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.99
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -v http://10.8.0.92:8080/todo
+*   Trying 10.8.0.92...
+* TCP_NODELAY set
+* Connected to 10.8.0.92 (10.8.0.92) port 8080 (#0)
+> GET /todo HTTP/1.1
+> Host: 10.8.0.92:8080
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+< HTTP/1.1 404 Not Found
+< Server: restify
+< Content-Type: application/json
+< Content-Length: 60
+< Date: Fri, 24 Sep 2021 06:13:01 GMT
+< Connection: keep-alive
+< 
+* Connection #0 to host 10.8.0.92 left intact
+{"code":"ResourceNotFound","message":"/todo does not exist"}sh-4.4$ 
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get pods -o wide -l name=frontend
+NAME                        READY   STATUS    RESTARTS   AGE   IP          NODE       NOMINATED NODE   READINESS GATES
+frontend-5cbdf5bf85-zkwrt   1/1     Running   0          15m   10.8.0.92   master01   <none>           <none>
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.100
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -v http://10.8.0.92:8080/todo/
+*   Trying 10.8.0.92...
+* TCP_NODELAY set
+* Connected to 10.8.0.92 (10.8.0.92) port 8080 (#0)
+> GET /todo/ HTTP/1.1
+> Host: 10.8.0.92:8080
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: restify
+< Cache-Control: public, max-age=3600
+< Content-Length: 4508
+< Content-Type: text/html
+< Last-Modified: Thu, 05 Dec 2019 22:50:51 GMT
+< Connection: Keep-Alive
+< Date: Fri, 24 Sep 2021 06:15:00 GMT
+< Request-Id: e525f4ec-15bb-47ee-beb4-6f6bc5ae1e7b
+< Response-Time: 15
+< 
+<!DOCTYPE html>
+
+<html ng-app="items">
+<head>
+    <title>To Do List</title>
+
+    <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
+
+    <!-- build:css css/application.css -->
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <!-- endbuild -->
+
+    <script src="lib/dependencies/jquery.min.js"></script>
+    <script src="lib/dependencies/angular.min.js"></script>
+    <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="lib/dependencies/ng-grid-2.0.11.min.js"></script>
+    <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- build:js script/all.js -->
+    <script src="script/item.js"></script>
+    <!-- endbuild -->
+</head>
+
+<body>
+
+<h1>To Do List Application</h1>
+
+<br/>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the feedback messages.-->
+<div class="message" ng-controller="alertMessagesController">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+
+<br>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the grid.-->
+<div class="grid" ng-controller="itemsListController">
+    <div>
+        <h3>To Do List</h3>
+    </div>
+
+    <!-- Binds the grid component to be displayed. -->
+    <div class="gridStyle" ng-grid="gridOptions"></div>
+
+    <!--  Bind the pagination component to be displayed. -->
+    <pagination direction-links="true" boundary-links="true"
+                total-items="items.totalResults" items-per-page="items.pageSize"
+                ng-model="items.currentPage" ng-change="refreshGrid()">
+    </pagination>
+</div>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the form.-->
+<div class="form" ng-controller="itemsFormController">
+    <!-- Verify item, if there is no id present, that we are Adding a Item -->
+    <div ng-if="item.id == null">
+        <h3>Add Task</h3>
+    </div>
+    <!-- Otherwise it's an Edit -->
+    <div ng-if="item.id != null">
+        <h3>Edit Task</h3>
+    </div>
+
+    <div>
+        <!-- Specify the function to be called on submit and disable HTML5 validation, since we're using Angular validation-->
+        <form name="itemForm" ng-submit="updateItem()" novalidate>
+
+            <!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+            <div class="form-group" ng-class="{'has-error' : itemForm.description.$invalid && itemForm.description.$dirty}">
+                <label for="description">Description:</label>
+                <!-- Display a check when the field is valid and was modified -->
+                <span ng-class="{'glyphicon glyphicon-ok' : itemForm.description.$valid && itemForm.description.$dirty}"></span>
+
+                <input id="description" name="description" type="text" class="form-control" maxlength="100"
+                       ng-model="item.description"
+                       required ng-minlength="5" ng-maxlength="100"/>
+
+                <!-- Validation messages to be displayed on required, minlength and maxlength -->
+                <p class="help-block" ng-show="itemForm.description.$error.required">Add Description.</p>
+                <p class="help-block" ng-show="itemForm.description.$error.minlength">Description must be at least 5 characters long.</p>
+                <p class="help-block" ng-show="itemForm.description.$error.maxlength">Description cannot be longer than 100 characters.</p>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error' : itemForm.done.$invalid && itemForm.done.$dirty}">
+                <label for="done">Completed:</label>
+                <!-- Display a check when the field is valid and was modified -->
+                <span ng-class="{'glyphicon glyphicon-ok' : itemForm.done.$valid && itemForm.done.$dirty}"></span>
+
+                <input id="done" name="done" type="checkbox" class="form-control"
+                       ng-model="item.done" />
+
+            </div>
+
+            <!-- Form buttons. The 'Save' button is only enabled when the form is valid. -->
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="itemForm.$invalid">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+* Connection #0 to host 10.8.0.92 left intact
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get svc
+NAME       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+frontend   ClusterIP   172.30.106.169   <none>        8080/TCP   16m
+mysql      ClusterIP   172.30.102.178   <none>        3306/TCP   19m
+[student@workstation network-sdn]$ oc describe svc/frontend
+Name:              frontend
+Namespace:         network-sdn
+Labels:            app=todonodejs
+                   name=frontend
+Annotations:       <none>
+Selector:          name=api
+Type:              ClusterIP
+IP:                172.30.106.169
+Port:              <unset>  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+[student@workstation network-sdn]$ describe deployment/frontend | grep Labels -A1
+bash: describe: command not found...
+[student@workstation network-sdn]$ oc describe deployment/frontend | grep Labels -A1
+Labels:                 app=todonodejs
+                        name=frontend
+--
+  Labels:  app=todonodejs
+           name=frontend
+[student@workstation network-sdn]$ oc edit svc/frontend
+service/frontend edited
+[student@workstation network-sdn]$ oc describe svc/frontend
+Name:              frontend
+Namespace:         network-sdn
+Labels:            app=todonodejs
+                   name=frontend
+Annotations:       <none>
+Selector:          name=frontend
+Type:              ClusterIP
+IP:                172.30.106.169
+Port:              <unset>  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.8.0.92:8080
+Session Affinity:  None
+Events:            <none>
+[student@workstation network-sdn]$ cd
+[student@workstation ~]$ oc delete project network-sdn
+project.project.openshift.io "network-sdn" deleted
+[student@workstation ~]$ lab network-sdn finish
+
+Completing Guided Exercise: Troubleshooting OpenShift Software-Defined Networking
+
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ lab network-ingress start
+
+Checking prerequisites for Guided Exercise: Controlling Cluster Network Ingress
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'network-ingress' project is absent.....................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Controlling Cluster Network Ingress
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ Preparing Workstation:
+ · Download exercise files.....................................  SUCCESS
+ Configuring Certificates:
+ · Generating unique CA key password...........................  SUCCESS
+ · Setting environment variable in cert. configuration file....  SUCCESS
+ · Generating the CA key.......................................  SUCCESS
+ · Generating CA certificate...................................  SUCCESS
+ · Updating privileges on certs directory......................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project network-ingress
+Now using project "network-ingress" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc create -f ~/DO280/labs/network-ingress/todo-app-v1.yaml
+deployment.apps/todo-http created
+service/todo-http created
+[student@workstation ~]$ oc sttus
+Error: unknown command "sttus" for "oc"
+
+Did you mean this?
+	status
+
+Run 'oc --help' for usage.
+[student@workstation ~]$ oc status
+In project network-ingress on server https://api.ocp4.example.com:6443
+
+svc/todo-http - 172.30.73.79:80 -> 8080
+  deployment/todo-http deploys quay.io/redhattraining/todo-angular:v1.1
+    deployment #1 running for 42 seconds - 1 pod
+
+
+1 info identified, use 'oc status --suggest' to see details.
+[student@workstation ~]$ oc expose svc todo-http --hostname todo-http.apps.ocp4.example.com
+route.route.openshift.io/todo-http exposed
+[student@workstation ~]$ oc get routes
+NAME        HOST/PORT                         PATH   SERVICES    PORT   TERMINATION   WILDCARD
+todo-http   todo-http.apps.ocp4.example.com          todo-http   8080                 None
+[student@workstation ~]$ cd ~/DO280/labs/network-ingress
+[student@workstation network-ingress]$ oc create route edge todo-https --service todo-http --hostname todo-https.apps.ocp4.example.com
+route.route.openshift.io/todo-https created
+[student@workstation network-ingress]$ curl -I -v https://todo-https.apps.ocp4.example.com
+* Rebuilt URL to: https://todo-https.apps.ocp4.example.com/
+*   Trying 192.168.50.254...
+* TCP_NODELAY set
+* Connected to todo-https.apps.ocp4.example.com (192.168.50.254) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.3 (OUT), TLS handshake, [no content] (0):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: O=EXAMPLE.COM; CN=api.ocp4.example.com
+*  start date: May 10 11:18:41 2021 GMT
+*  expire date: May 10 11:18:41 2026 GMT
+*  subjectAltName: host "todo-https.apps.ocp4.example.com" matched cert's "*.apps.ocp4.example.com"
+*  issuer: O=EXAMPLE.COM; CN=Red Hat Training Certificate Authority
+*  SSL certificate verify ok.
+* TLSv1.3 (OUT), TLS app data, [no content] (0):
+> HEAD / HTTP/1.1
+> Host: todo-https.apps.ocp4.example.com
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS app data, [no content] (0):
+< HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+< Server: nginx/1.14.1
+Server: nginx/1.14.1
+< Date: Fri, 24 Sep 2021 07:22:33 GMT
+Date: Fri, 24 Sep 2021 07:22:33 GMT
+< Content-Type: text/html
+Content-Type: text/html
+< Set-Cookie: 947acc174fec7aa4880f048abd1ce952=a3fb5ba7d483dd4f479c705bd4d0c396; path=/; HttpOnly; Secure; SameSite=None
+Set-Cookie: 947acc174fec7aa4880f048abd1ce952=a3fb5ba7d483dd4f479c705bd4d0c396; path=/; HttpOnly; Secure; SameSite=None
+< Cache-control: private
+Cache-control: private
+
+< 
+* Connection #0 to host todo-https.apps.ocp4.example.com left intact
+[student@workstation network-ingress]$ oc get svc todo-http -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.73.79
+[student@workstation network-ingress]$ oc debug -t deployment/todo-http --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/todo-http-debug ...
+Pod IP: 10.10.1.114
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -v 172.30.73.79
+* Rebuilt URL to: 172.30.73.79/
+*   Trying 172.30.73.79...
+* TCP_NODELAY set
+* Connected to 172.30.73.79 (172.30.73.79) port 80 (#0)
+> GET / HTTP/1.1
+> Host: 172.30.73.79
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: nginx/1.14.1
+< Date: Fri, 24 Sep 2021 07:25:04 GMT
+< Content-Type: text/html
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< 
+<!DOCTYPE html>
+<html lang="en" ng-app="todoItemsApp" ng-controller="appCtl">
+<head>
+    <meta charset="utf-8">
+    <title>ToDo app</title>
+
+    <link rel="stylesheet" href="assets/css/libs/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/libs/angular-motion/angular-motion.css">
+    <link rel="stylesheet" href="assets/css/libs/angular-xeditable/xeditable.css">
+
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <script type="text/javascript" src="assets/js/libs/jquery/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/libs/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular/angular.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular/angular-route.min.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular/angular-animate.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular-ui-router/angular-ui-router.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular-strap/angular-strap.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular-strap/angular-strap.tpl.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular-xeditable/xeditable.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular/angular-sanitize.js"></script>
+    <script type="text/javascript" src="assets/js/app/utils/md5.js"></script>
+
+    <script type="text/javascript" src="assets/js/app/module.js"></script>
+    <script type="text/javascript" src="assets/js/app/states/states.js"></script>
+
+    <script type="text/javascript" src="assets/js/app/domain/todoitems.js"></script>
+    <script type="text/javascript" src="assets/js/app/ui/filters.js"></script>
+
+    <script type="text/javascript" src="assets/js/app/ui/focus.js"></script>
+    <script type="text/javascript" src="assets/js/app/ui/gravatar.js"></script>
+    <script type="text/javascript" src="assets/js/app/ui/editable.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-toggle">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">ToDo App</a>
+    </div>
+    <div class="collapse navbar-collapse" id="nav-toggle">
+        <ul class="nav navbar-nav">
+            <li ui-sref-active="active"><a ui-sref="list">Browse</a></li>
+            <li ui-sref-active="active"><a ui-sref="create">Create</a></li>
+        </ul>
+        <form class="navbar-form navbar-right" role="search">
+            <input type="text" class="form-control" placeholder="Search" ng-model="search.description" ng-keyup="startSearch()">
+        </form>
+    </div>
+
+</nav>
+<div class="container">
+    <div ui-view></div>
+</div>
+
+</body>
+* Connection #0 to host 172.30.73.79 left intact
+</html>sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-ingress]$ oc delete route todo-https
+route.route.openshift.io "todo-https" deleted
+[student@workstation network-ingress]$ cd certs
+[student@workstation certs]$ ls -l
+total 20
+-rw-rw-r--. 1 student student  566 Aug  5 11:44 openssl-commands.txt
+-rw-rw-r--. 1 student student   33 Sep 24 03:13 passphrase.txt
+-rw-------. 1 student student 1743 Sep 24 03:13 training-CA.key
+-rw-r--r--. 1 student student 1334 Sep 24 03:13 training-CA.pem
+-rw-r--r--. 1 student student  352 Sep 24 03:13 training.ext
+[student@workstation certs]$ openssl genrsa -out training.key 2048
+Generating RSA private key, 2048 bit long modulus (2 primes)
+......................+++++
+......................................+++++
+e is 65537 (0x010001)
+[student@workstation certs]$ openssl req -new -subj "/C=US/ST=North Carolina/L=Raleigh/O=Red Hat/CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+[student@workstation certs]$ openssl x509 -req -in training.csr -passin file:passphrase.txt -CA training-CA.pem -CAkey training-CA.key -CAcreateserial -out training.crt -days 1825 -sha256 -extfile training.ext
+Signature ok
+subject=C = US, ST = North Carolina, L = Raleigh, O = Red Hat, CN = todo-https.apps.ocp4.example.com
+Getting CA Private Key
+[student@workstation certs]$ ls -ltrt
+total 36
+-rw-rw-r--. 1 student student  566 Aug  5 11:44 openssl-commands.txt
+-rw-rw-r--. 1 student student   33 Sep 24 03:13 passphrase.txt
+-rw-r--r--. 1 student student  352 Sep 24 03:13 training.ext
+-rw-------. 1 student student 1743 Sep 24 03:13 training-CA.key
+-rw-r--r--. 1 student student 1334 Sep 24 03:13 training-CA.pem
+-rw-------. 1 student student 1679 Sep 24 03:26 training.key
+-rw-rw-r--. 1 student student 1021 Sep 24 03:26 training.csr
+-rw-rw-r--. 1 student student   39 Sep 24 03:27 training-CA.srl
+-rw-rw-r--. 1 student student 1399 Sep 24 03:27 training.crt
+[student@workstation certs]$ cd ~/DO280/labs/network-ingress
+[student@workstation network-ingress]$ oc create secret tls todo-certs --cert certs/training.crt --key certs/training.key
+secret/todo-certs created
+[student@workstation network-ingress]$ oc create -f todo-app-v2.yaml
+deployment.apps/todo-https created
+service/todo-https created
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS              RESTARTS   AGE
+todo-http-5b8874d978-892kr    1/1     Running             0          14m
+todo-https-7d59b58dcf-8sxq9   0/1     ContainerCreating   0          4s
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS              RESTARTS   AGE
+todo-http-5b8874d978-892kr    1/1     Running             0          15m
+todo-https-7d59b58dcf-8sxq9   0/1     ContainerCreating   0          20s
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+todo-http-5b8874d978-892kr    1/1     Running   0          15m
+todo-https-7d59b58dcf-8sxq9   1/1     Running   0          46s
+[student@workstation network-ingress]$ oc describe pod todo-https-7d59b58dcf-8sxq9 | grep Mounts -A2
+    Mounts:
+      /usr/local/etc/ssl/certs from tls-certs (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rhrt6 (ro)
+[student@workstation network-ingress]$ oc create route passthrough todo-https --service todo-https --port 8443 --hostname todo-https.apps.ocp4.example.com
+route.route.openshift.io/todo-https created
+[student@workstation network-ingress]$ curl -vvI --cacert certs/training-CA.pem https://todo-https.apps.ocp4.example.com
+* Rebuilt URL to: https://todo-https.apps.ocp4.example.com/
+*   Trying 192.168.50.254...
+* TCP_NODELAY set
+* Connected to todo-https.apps.ocp4.example.com (192.168.50.254) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: certs/training-CA.pem
+  CApath: none
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: C=US; ST=North Carolina; L=Raleigh; O=Red Hat; CN=todo-https.apps.ocp4.example.com
+*  start date: Sep 24 07:27:29 2021 GMT
+*  expire date: Sep 23 07:27:29 2026 GMT
+*  subjectAltName: host "todo-https.apps.ocp4.example.com" matched cert's "*.apps.ocp4.example.com"
+*  issuer: C=US; ST=North Carolina; L=Raleigh; O=Red Hat; CN=ocp4.example.com
+*  SSL certificate verify ok.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* Using Stream ID: 1 (easy handle 0x564830b8a740)
+> HEAD / HTTP/2
+> Host: todo-https.apps.ocp4.example.com
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+* Connection state changed (MAX_CONCURRENT_STREAMS == 128)!
+< HTTP/2 200 
+HTTP/2 200 
+< server: nginx/1.14.1
+server: nginx/1.14.1
+< date: Fri, 24 Sep 2021 07:31:20 GMT
+date: Fri, 24 Sep 2021 07:31:20 GMT
+< content-type: text/html
+content-type: text/html
+< content-length: 3017
+content-length: 3017
+< last-modified: Thu, 28 Nov 2019 19:53:20 GMT
+last-modified: Thu, 28 Nov 2019 19:53:20 GMT
+< etag: "5de025b0-bc9"
+etag: "5de025b0-bc9"
+< strict-transport-security: max-age=63072000; includeSubdomains
+strict-transport-security: max-age=63072000; includeSubdomains
+< x-frame-options: DENY
+x-frame-options: DENY
+< x-content-type-options: nosniff
+x-content-type-options: nosniff
+< accept-ranges: bytes
+accept-ranges: bytes
+
+< 
+* Connection #0 to host todo-https.apps.ocp4.example.com left intact
+[student@workstation network-ingress]$ oc get svc todo-https -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.59.180
+[student@workstation network-ingress]$ oc debug -t deployment/todo-https --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/todo-https-debug ...
+Pod IP: 10.9.0.229
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -I 172.30.59.180
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.14.1
+Date: Fri, 24 Sep 2021 07:33:01 GMT
+Content-Type: text/html
+Connection: keep-alive
+Location: https://172.30.59.180:8443/
+
+sh-4.4$ curl -s -k https://172.30.59.180:8443 | head -n5
+<!DOCTYPE html>
+<html lang="en" ng-app="todoItemsApp" ng-controller="appCtl">
+<head>
+    <meta charset="utf-8">
+    <title>ToDo app</title>
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-ingress]$ cd
+[student@workstation ~]$ oc delete project network-ingress
+project.project.openshift.io "network-ingress" deleted
+[student@workstation ~]$ lab network-ingress finish
+
+Completing Guided Exercise: Controlling Cluster Network Ingress
+
+ · Remove exercise files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab network-policy start
+
+Checking prerequisites for Guided Exercise: Configuring Network Policies
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'network-policy' project is absent......................  SUCCESS
+ · The 'network-test' project is absent........................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Configuring Network Policies
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ Preparing Workstation:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project network-policy
+Now using project "network-policy" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc new-app --name hello --docker-image quay.io/redhattraining/hello-world-nginx:v1.0
+--> Found container image 44eaa13 (2 years old) from quay.io for "quay.io/redhattraining/hello-world-nginx:v1.0"
+
+    Red Hat Universal Base Image 8 
+    ------------------------------ 
+    The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.
+
+    Tags: base rhel8
+
+    * An image stream tag will be created as "hello:v1.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "hello" created
+    deployment.apps "hello" created
+    service "hello" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/hello' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc new-app --name test --docker-image quay.io/redhattraining/hello-world-nginx:v1.0
+--> Found container image 44eaa13 (2 years old) from quay.io for "quay.io/redhattraining/hello-world-nginx:v1.0"
+
+    Red Hat Universal Base Image 8 
+    ------------------------------ 
+    The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.
+
+    Tags: base rhel8
+
+    * An image stream tag will be created as "test:v1.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "test" created
+    deployment.apps "test" created
+    service "test" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/test' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc expose service hello
+route.route.openshift.io/hello exposed
+[student@workstation ~]$ rsh test-c4d74c9d5-5pq9s curl 10.8.0.13:8080 | grep Hello
+bash: rsh: command not found...
+[student@workstation ~]$ oc rsh test-c4d74c9d5-5pq9s curl 10.8.0.13:8080 | grep Hello
+Error from server (NotFound): pods "test-c4d74c9d5-5pq9s" not found
+[student@workstation ~]$ oc rsh test-54f6b56774-k84fg curl 10.8.0.13:8080 | grep Hello
+command terminated with exit code 7
+[student@workstation ~]$ oc rsh test-54f6b56774-k84fg curl 10.8.0.13:8080 | grep Hello
+command terminated with exit code 7
+[student@workstation ~]$ oc get all
+NAME                        READY   STATUS    RESTARTS   AGE
+pod/hello-b8d559466-5x2bs   1/1     Running   0          3m27s
+pod/test-54f6b56774-k84fg   1/1     Running   0          3m3s
+
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/hello   ClusterIP   172.30.9.143    <none>        8080/TCP   3m29s
+service/test    ClusterIP   172.30.47.222   <none>        8080/TCP   3m4s
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello   1/1     1            1           3m29s
+deployment.apps/test    1/1     1            1           3m4s
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-65b6c6fd57   0         0         0       3m29s
+replicaset.apps/hello-b8d559466    1         1         1       3m28s
+replicaset.apps/test-54f6b56774    1         1         1       3m3s
+replicaset.apps/test-df848796f     0         0         0       3m4s
+
+NAME                                   IMAGE REPOSITORY                                                        TAGS   UPDATED
+imagestream.image.openshift.io/hello   image-registry.openshift-image-registry.svc:5000/network-policy/hello   v1.0   3 minutes ago
+imagestream.image.openshift.io/test    image-registry.openshift-image-registry.svc:5000/network-policy/test    v1.0   3 minutes ago
+
+NAME                             HOST/PORT                                    PATH   SERVICES   PORT       TERMINATION   WILDCARD
+route.route.openshift.io/hello   hello-network-policy.apps.ocp4.example.com          hello      8080-tcp                 None
+[student@workstation ~]$ oc rsh test-54f6b56774-k84fg curl 10.9.0.231:8080 | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation ~]$ oc rsh test-c4d74c9d5-5pq9s curl 172.30.13^C
+[student@workstation ~]$ oc rsh test-54f6b56774-k84fg curl 172.30.9.143:8080 | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation ~]$ curl -s hello-network-policy.apps.ocp4.example.com | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation ~]$ oc new-project network-test
+Now using project "network-test" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc new-app --name sample-app --docker-image quay.io/redhattraining/hello-world-nginx:v1.0
+--> Found container image 44eaa13 (2 years old) from quay.io for "quay.io/redhattraining/hello-world-nginx:v1.0"
+
+    Red Hat Universal Base Image 8 
+    ------------------------------ 
+    The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.
+
+    Tags: base rhel8
+
+    * An image stream tag will be created as "sample-app:v1.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "sample-app" created
+    deployment.apps "sample-app" created
+    service "sample-app" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/sample-app' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.9.0.231:8080 | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation ~]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.8.0.100:8080 | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation ~]$ oc project network-policy
+Now using project "network-policy" on server "https://api.ocp4.example.com:6443".
+[student@workstation ~]$ cd ~/DO280/labs/network-policy/
+[student@workstation network-policy]$ vi deny-all.yaml 
+[student@workstation network-policy]$ oc create -f deny-all.yaml 
+networkpolicy.networking.k8s.io/deny-all created
+[student@workstation network-policy]$ curl -s hello-network-policy.apps.ocp4.example.com | grep Hello
+^C
+[student@workstation network-policy]$ oc rsh test-54f6b56774-k84fg curl 10.9.0.231:8080 | grep Hello
+command terminated with exit code 130
+[student@workstation network-policy]$ oc project network-test
+Now using project "network-test" on server "https://api.ocp4.example.com:6443".
+[student@workstation network-policy]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.8.0.100:8080 | grep Hello
+command terminated with exit code 130
+[student@workstation network-policy]$ vi allow-specific.yaml 
+[student@workstation network-policy]$ oc create -n network-policy -f allow-specific.yaml
+networkpolicy.networking.k8s.io/allow-specific created
+[student@workstation network-policy]$ oc get networkpolicies -n network-policy
+NAME             POD-SELECTOR       AGE
+allow-specific   deployment=hello   18s
+deny-all         <none>             5m45s
+[student@workstation network-policy]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 62 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "network-test".
+[student@workstation network-policy]$ oc label namespace network-test name=network-test
+namespace/network-test labeled
+[student@workstation network-policy]$ oc describe namespace network-test
+Name:         network-test
+Labels:       name=network-test
+Annotations:  openshift.io/description: 
+              openshift.io/display-name: 
+              openshift.io/requester: developer
+              openshift.io/sa.scc.mcs: s0:c27,c4
+              openshift.io/sa.scc.supplemental-groups: 1000710000/10000
+              openshift.io/sa.scc.uid-range: 1000710000/10000
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+[student@workstation network-policy]$ oc login -u developer -p developer
+Login successful.
+
+You have access to the following projects and can switch between them with ' project <projectname>':
+
+    network-policy
+  * network-test
+
+Using project "network-test".
+[student@workstation network-policy]$ oc rsh 
+
+
+---
+
+[student@workstation ~]$ ip a | grep 172.25.250.9
+    inet 172.25.250.9/24 brd 172.25.250.255 scope global noprefixroute eth0
+[student@workstation ~]$ sudo tcpdump -i eth0 -A -n port 80 | grep js
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+Accept: application/json, text/plain, */*
+^C9 packets captured
+9 packets received by filter
+0 packets dropped by kernel
+
+[student@workstation ~]$ ~/DO280/labs/network-policy/display-project-info.sh
+===================================================================
+PROJECT: network-policy
+
+POD NAME                IP ADDRESS
+hello-b8d559466-5x2bs   10.9.0.231
+test-54f6b56774-k84fg   10.8.0.100
+
+SERVICE NAME   CLUSTER-IP
+hello          172.30.9.143
+test           172.30.47.222
+
+ROUTE NAME   HOSTNAME                                     PORT
+hello        hello-network-policy.apps.ocp4.example.com   8080-tcp
+
+===================================================================
+[student@workstation ~]$ ~/DO280/labs/network-policy/display-project-info.sh
+===================================================================
+PROJECT: network-policy
+
+POD NAME                IP ADDRESS
+hello-b8d559466-5x2bs   10.9.0.231
+test-54f6b56774-k84fg   10.8.0.100
+
+SERVICE NAME   CLUSTER-IP
+hello          172.30.9.143
+test           172.30.47.222
+
+ROUTE NAME   HOSTNAME                                     PORT
+hello        hello-network-policy.apps.ocp4.example.com   8080-tcp
+
+===================================================================
+PROJECT: network-test
+
+POD NAME
+sample-app-5645b95bc8-glxjl
+
+===================================================================
+[student@workstation ~]$ 
+
