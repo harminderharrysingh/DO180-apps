@@ -84,8 +84,6 @@ Username for 'https://github.com': harminderharrysingh
 Password for 'https://harminderharrysingh@github.com': 
 remote: Permission to harminderharrysingh/DO180-apps.git denied to hsingh-hw9.
 fatal: unable to access 'https://github.com/harminderharrysingh/DO180-apps.git/': The requested URL returned error: 403
-[student@workstation DO180-apps]$ cat ~/token 
-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
 [student@workstation DO180-apps]$ git push
 Username for 'https://github.com': harminderharrysingh
 Password for 'https://harminderharrysingh@github.com': 
