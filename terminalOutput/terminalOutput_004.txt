@@ -1,0 +1,1046 @@
+[student@workstation network-policy]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.9.0.231:8080 | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation network-policy]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.9.0.231:8181 | grep Hello
+command terminated with exit code 130
+[student@workstation network-policy]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.8.0.100:8080 | grep Hello
+]command terminated with exit code 130
+[student@workstation network-policy]$ oc rsh sample-app-5645b95bc8-glxjl curl 10.8.0.100:8080 | grep Hello
+command terminated with exit code 130
+[student@workstation network-policy]$ vi allow-from-openshift-ingress.yaml 
+[student@workstation network-policy]$ oc create -n network-policy -f allow-from-openshift-ingress.yaml
+networkpolicy.networking.k8s.io/allow-from-openshift-ingress created
+[student@workstation network-policy]$ oc get networkpolicies -n network-policy
+NAME                           POD-SELECTOR       AGE
+allow-from-openshift-ingress   <none>             16s
+allow-specific                 deployment=hello   6m10s
+deny-all                       <none>             11m
+[student@workstation network-policy]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 62 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "network-test".
+[student@workstation network-policy]$ oc label namespace default network.openshift.io/policy-group=ingress
+namespace/default labeled
+[student@workstation network-policy]$ curl -s hello-network-policy.apps.ocp4.example.com | grep Hello
+    <h1>Hello, world from nginx!</h1>
+[student@workstation network-policy]$ cd
+[student@workstation ~]$ lab network-policy finish
+
+Completing Guided Exercise: Configuring Network Policies
+
+ · Delete OpenShift project 'network-policy'...................  SUCCESS
+ · Wait for project 'network-policy' to be gone................  SUCCESS
+ · Delete OpenShift project 'network-test'.....................  SUCCESS
+ · Wait for project 'network-test' to be gone..................  SUCCESS
+ · Remove network.openshift.io/policy-group=ingress label from 
+   the default project.........................................  SUCCESS
+ · Remove exercise files.......................................  FAIL
+
+Cannot continue due to the previous errors.....................  FAIL
+One or more terminal prompts is at /home/student/DO280/labs/network-policy (or a subdirectory). Change to the /home/student/ directory and run 'lab network-policy finish' again.
+
+[student@workstation ~]$ lab network-policy finish
+
+Completing Guided Exercise: Configuring Network Policies
+
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ lab schedule-pods start
+
+Checking prerequisites for Guided Exercise: Controlling Pod Scheduling Behavior
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+ Checking for conflicts with existing OpenShift projects:
+ · The 'schedule-pods' project is absent.......................  SUCCESS
+ · The 'schedule-pods-ts' project is absent....................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Controlling Pod Scheduling Behavior
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+ Preparing the student's cluster:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+ · Label the first worker node with 'client=ACME'..............  SUCCESS
+ · Create project 'schedule-pods-ts' for troubleshooting.......  SUCCESS
+ · Assign 'edit' role to 'developer' on 'schedule-pods-ts'.....  SUCCESS
+ · Deploy 'hello-ts' application to 'schedule-pods-ts'.........  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You have one project on this server: "schedule-pods-ts"
+
+Using project "schedule-pods-ts".
+[student@workstation ~]$ oc new-project schedule-pods
+Now using project "schedule-pods" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc new-app --name hello --docker-image quay.io/redhattraining/hello-world-nginx:v1.0
+--> Found container image 44eaa13 (2 years old) from quay.io for "quay.io/redhattraining/hello-world-nginx:v1.0"
+
+    Red Hat Universal Base Image 8 
+    ------------------------------ 
+    The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.
+
+    Tags: base rhel8
+
+    * An image stream tag will be created as "hello:v1.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "hello" created
+    deployment.apps "hello" created
+    service "hello" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/hello' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc expose svc/hello
+route.route.openshift.io/hello exposed
+[student@workstation ~]$ oc scale --replicas 4 deployment/hello
+deployment.apps/hello scaled
+[student@workstation ~]$ oc get pods -o wide
+NAME                    READY   STATUS              RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+hello-b8d559466-dqq85   0/1     ContainerCreating   0          5s    <none>       master03   <none>           <none>
+hello-b8d559466-n2dl7   1/1     Running             0          5s    10.8.0.142   master01   <none>           <none>
+hello-b8d559466-shfth   1/1     Running             0          63s   10.8.0.141   master01   <none>           <none>
+hello-b8d559466-vnf9d   1/1     Running             0          5s    10.9.1.25    master02   <none>           <none>
+[student@workstation ~]$ oc get pods -o wide
+NAME                    READY   STATUS              RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+hello-b8d559466-dqq85   0/1     ContainerCreating   0          10s   <none>       master03   <none>           <none>
+hello-b8d559466-n2dl7   1/1     Running             0          10s   10.8.0.142   master01   <none>           <none>
+hello-b8d559466-shfth   1/1     Running             0          68s   10.8.0.141   master01   <none>           <none>
+hello-b8d559466-vnf9d   1/1     Running             0          10s   10.9.1.25    master02   <none>           <none>
+[student@workstation ~]$ oc get pods -o wide
+NAME                    READY   STATUS              RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+hello-b8d559466-dqq85   0/1     ContainerCreating   0          13s   <none>       master03   <none>           <none>
+hello-b8d559466-n2dl7   1/1     Running             0          13s   10.8.0.142   master01   <none>           <none>
+hello-b8d559466-shfth   1/1     Running             0          71s   10.8.0.141   master01   <none>           <none>
+hello-b8d559466-vnf9d   1/1     Running             0          13s   10.9.1.25    master02   <none>           <none>
+[student@workstation ~]$ oc get pods -o wide -w
+NAME                    READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+hello-b8d559466-dqq85   1/1     Running   0          17s   10.10.1.197   master03   <none>           <none>
+hello-b8d559466-n2dl7   1/1     Running   0          17s   10.8.0.142    master01   <none>           <none>
+hello-b8d559466-shfth   1/1     Running   0          75s   10.8.0.141    master01   <none>           <none>
+hello-b8d559466-vnf9d   1/1     Running   0          17s   10.9.1.25     master02   <none>           <none>
+q^C[student@workstation ~]$ oc get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+hello-b8d559466-dqq85   1/1     Running   0          25s   10.10.1.197   master03   <none>           <none>
+hello-b8d559466-n2dl7   1/1     Running   0          25s   10.8.0.142    master01   <none>           <none>
+hello-b8d559466-shfth   1/1     Running   0          83s   10.8.0.141    master01   <none>           <none>
+hello-b8d559466-vnf9d   1/1     Running   0          25s   10.9.1.25     master02   <none>           <none>
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 62 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "schedule-pods".
+[student@workstation ~]$ oc get nodes -L env
+NAME       STATUS   ROLES           AGE   VERSION           ENV
+master01   Ready    master,worker   73d   v1.19.0+b00ba52   
+master02   Ready    master,worker   73d   v1.19.0+b00ba52   
+master03   Ready    master,worker   73d   v1.19.0+b00ba52   
+[student@workstation ~]$ oc label node master01 env=dev
+node/master01 labeled
+[student@workstation ~]$ oc label node master02 env=prod
+node/master02 labeled
+[student@workstation ~]$ oc get nodes -L env
+NAME       STATUS   ROLES           AGE   VERSION           ENV
+master01   Ready    master,worker   73d   v1.19.0+b00ba52   dev
+master02   Ready    master,worker   73d   v1.19.0+b00ba52   prod
+master03   Ready    master,worker   73d   v1.19.0+b00ba52   
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You have access to the following projects and can switch between them with ' project <projectname>':
+
+  * schedule-pods
+    schedule-pods-ts
+
+Using project "schedule-pods".
+[student@workstation ~]$ oc edit deployment/hello
+deployment.apps/hello edited
+[student@workstation ~]$ oc get pods -o wide
+NAME                    READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+hello-758c85c9c-88jp2   1/1     Running   0          14s   10.8.0.145   master01   <none>           <none>
+hello-758c85c9c-bj7pj   1/1     Running   0          19s   10.8.0.143   master01   <none>           <none>
+hello-758c85c9c-fsp4b   1/1     Running   0          14s   10.8.0.146   master01   <none>           <none>
+hello-758c85c9c-jptwt   1/1     Running   0          19s   10.8.0.144   master01   <none>           <none>
+[student@workstation ~]$ oc delete project schedule pods
+Error from server (Forbidden): projects.project.openshift.io "schedule" is forbidden: User "developer" cannot delete resource "projects" in API group "project.openshift.io" in the namespace "schedule"
+Error from server (Forbidden): projects.project.openshift.io "pods" is forbidden: User "developer" cannot delete resource "projects" in API group "project.openshift.io" in the namespace "pods"
+[student@workstation ~]$ oc delete project schedule-pods
+project.project.openshift.io "schedule-pods" deleted
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 62 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "schedule-pods".
+[student@workstation ~]$ oc label node -l env env-
+node/master01 labeled
+node/master02 labeled
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You have one project on this server: "schedule-pods-ts"
+
+Using project "schedule-pods-ts".
+[student@workstation ~]$ oc project schedule-pods-ts
+Already on project "schedule-pods-ts" on server "https://api.ocp4.example.com:6443".
+[student@workstation ~]$ oc get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+hello-ts-78fc8ffb7f-d42rj   0/1     Pending   0          7m49s
+[student@workstation ~]$ oc describe pod hello-ts-78fc8ffb7f-d42rj 
+.ansible/       .config/        Documents/      .local/         .pki/           Videos/
+.bash_history   dbfiles/        Downloads/      local/          Public/         .viminfo
+.bash_logout    Desktop/        .esd_auth       .mozilla/       .ssh/           .vimrc
+.bash_profile   DO180/          .gitconfig      Music/          Templates/      .vscode-oss/
+.bashrc         DO180-apps/     .ICEauthority   .mysql_history  token           
+.cache/         DO280/          .kube/          Pictures/       venv/           
+[student@workstation ~]$ oc describe pod hello-ts-78fc8ffb7f-d42rj 
+Name:           hello-ts-78fc8ffb7f-d42rj
+Namespace:      schedule-pods-ts
+Priority:       0
+Node:           <none>
+Labels:         app=hello-ts
+                pod-template-hash=78fc8ffb7f
+Annotations:    openshift.io/scc: restricted
+Status:         Pending
+IP:             
+IPs:            <none>
+Controlled By:  ReplicaSet/hello-ts-78fc8ffb7f
+Containers:
+  hello-world-nginx:
+    Image:        quay.io/redhattraining/hello-world-nginx:v1.0
+    Port:         <none>
+    Host Port:    <none>
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-zh5sx (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  default-token-zh5sx:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-zh5sx
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  client=acme
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                   From               Message
+  ----     ------            ----                  ----               -------
+  Warning  FailedScheduling  38s (x14 over 8m11s)  default-scheduler  0/3 nodes are available: 3 node(s) didn't match node selector.
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "schedule-pods-ts".
+[student@workstation ~]$ oc get nodes -L client
+NAME       STATUS   ROLES           AGE   VERSION           CLIENT
+master01   Ready    master,worker   73d   v1.19.0+b00ba52   ACME
+master02   Ready    master,worker   73d   v1.19.0+b00ba52   
+master03   Ready    master,worker   73d   v1.19.0+b00ba52   
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You have one project on this server: "schedule-pods-ts"
+
+Using project "schedule-pods-ts".
+[student@workstation ~]$ oc edit deployment/hello-ts
+deployment.apps/hello-ts edited
+[student@workstation ~]$ oc get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+hello-ts-7d8fb9b9bc-s4zsc   1/1     Running   0          14s
+[student@workstation ~]$ lab schedule-pods finish
+
+Completing Guided Exercise: Controlling Pod Scheduling Behavior
+
+ · Delete OpenShift project 'schedule-pods-ts'.................  SUCCESS
+ · Wait for project 'schedule-pods-ts' to be gone..............  SUCCESS
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+ · Remove 'client' label from worker nodes.....................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab schedule-limit start
+
+Checking prerequisites for Guided Exercise: Limiting Resource Usage by an Application
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+ Checking for conflicts with existing OpenShift projects:
+ · The 'schedule-limit' project is absent......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'template-test' project is absent.......................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Limiting Resource Usage by an Application
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+ Preparing the student's cluster:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project schedule-limit
+Now using project "schedule-limit" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc create deployment hello-limit --image quay.io/redhattraining/hello-world-nginx:v1.0 --dry-run=client -o yaml > ~/DO280/labs/schedule-limit/hello-limit.yaomcl create deployment hello-limit --image quay.io/redhattraining/hello-world-nginx:v1.0 --dry-run=client -o yaml > ~/DO280/labs/schedule-limit/hello-limit.yaml^C
+[student@workstation ~]$ oc create deployment hello-limit --image quay.io/redhattraining/hello-world-nginx:v1.0 --dry-run=client -o yaml > ~/DO280/labs/schedule-limit/hello-limit.yaml
+[student@workstation ~]$ vim ~/DO280/labs/schedule-limit/hello-limit.yaml
+[student@workstation ~]$ oc create --save-config -f ~/DO280/labs/schedule-limit/hello-limit.yaml 
+deployment.apps/hello-limit created
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-limit-78c45bf887-hsb4z   0/1     Pending   0          13s
+[student@workstation ~]$ oc get events --field-selectors type=warning
+Error: unknown flag: --field-selectors
+See 'oc get --help' for usage.
+[student@workstation ~]$ oc get events --field-selectors type=Warning
+Error: unknown flag: --field-selectors
+See 'oc get --help' for usage.
+[student@workstation ~]$ oc get events --field-selector type=Warning
+LAST SEEN   TYPE      REASON             OBJECT                             MESSAGE
+19s         Warning   FailedScheduling   pod/hello-limit-78c45bf887-hsb4z   0/3 nodes are available: 3 Insufficient cpu.
+[student@workstation ~]$ vim ~/DO280/labs/schedule-limit/hello-limit.yaml
+[student@workstation ~]$ oc apply -f ~/DO280/labs/schedule-limit/hello-limit.yaml 
+deployment.apps/hello-limit configured
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS              RESTARTS   AGE
+hello-limit-5b846b58bb-krrhp   0/1     ContainerCreating   0          4s
+hello-limit-78c45bf887-hsb4z   0/1     Pending             0          2m20s
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-limit-5b846b58bb-krrhp   1/1     Running   0          20s
+[student@workstation ~]$ oc scale --replicas 4 deployment/hello-limit
+deployment.apps/hello-limit scaled
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS              RESTARTS   AGE
+hello-limit-5b846b58bb-5kfxw   0/1     Pending             0          5s
+hello-limit-5b846b58bb-5t6xp   0/1     Pending             0          5s
+hello-limit-5b846b58bb-6ghkq   0/1     ContainerCreating   0          5s
+hello-limit-5b846b58bb-krrhp   1/1     Running             0          45s
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-limit-5b846b58bb-5kfxw   0/1     Pending   0          20s
+hello-limit-5b846b58bb-5t6xp   0/1     Pending   0          20s
+hello-limit-5b846b58bb-6ghkq   1/1     Running   0          20s
+hello-limit-5b846b58bb-krrhp   1/1     Running   0          60s
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-limit-5b846b58bb-5kfxw   0/1     Pending   0          22s
+hello-limit-5b846b58bb-5t6xp   0/1     Pending   0          22s
+hello-limit-5b846b58bb-6ghkq   1/1     Running   0          22s
+hello-limit-5b846b58bb-krrhp   1/1     Running   0          62s
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-limit-5b846b58bb-5kfxw   0/1     Pending   0          25s
+hello-limit-5b846b58bb-5t6xp   0/1     Pending   0          25s
+hello-limit-5b846b58bb-6ghkq   1/1     Running   0          25s
+hello-limit-5b846b58bb-krrhp   1/1     Running   0          65s
+[student@workstation ~]$ oc get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-limit-5b846b58bb-5kfxw   0/1     Pending   0          26s
+hello-limit-5b846b58bb-5t6xp   0/1     Pending   0          26s
+hello-limit-5b846b58bb-6ghkq   1/1     Running   0          26s
+hello-limit-5b846b58bb-krrhp   1/1     Running   0          66s
+[student@workstation ~]$ oc get events --field-selector type=Warning
+LAST SEEN   TYPE      REASON             OBJECT                             MESSAGE
+41s         Warning   FailedScheduling   pod/hello-limit-5b846b58bb-5kfxw   0/3 nodes are available: 3 Insufficient cpu.
+41s         Warning   FailedScheduling   pod/hello-limit-5b846b58bb-5t6xp   0/3 nodes are available: 3 Insufficient cpu.
+104s        Warning   FailedScheduling   pod/hello-limit-78c45bf887-hsb4z   0/3 nodes are available: 3 Insufficient cpu.
+102s        Warning   FailedScheduling   pod/hello-limit-78c45bf887-hsb4z   skip schedule deleting pod: schedule-limit/hello-limit-78c45bf887-hsb4z
+[student@workstation ~]$ oc delete all -l app=hello-limit
+pod "hello-limit-5b846b58bb-5kfxw" deleted
+pod "hello-limit-5b846b58bb-5t6xp" deleted
+pod "hello-limit-5b846b58bb-6ghkq" deleted
+pod "hello-limit-5b846b58bb-krrhp" deleted
+deployment.apps "hello-limit" deleted
+replicaset.apps "hello-limit-5b846b58bb" deleted
+replicaset.apps "hello-limit-78c45bf887" deleted
+[student@workstation ~]$ oc create --save-config -f ~/DO280/labs/schedule-limit/loadtest.yaml
+deployment.apps/loadtest created
+service/loadtest created
+route.route.openshift.io/loadtest created
+[student@workstation ~]$ oc get routes
+NAME       HOST/PORT                        PATH   SERVICES   PORT   TERMINATION   WILDCARD
+loadtest   loadtest.apps.ocp4.example.com          loadtest   8080                 None
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "schedule-limit".
+[student@workstation ~]$ oc create quota project-quota --hard cpu="3",memory="1G",configmaps="3" -n schedule-limit
+resourcequota/project-quota created
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You have one project on this server: "schedule-limit"
+
+Using project "schedule-limit".
+[student@workstation ~]$ for X in {1..4}
+> do
+> oc create configmap my-config${x} --from-literal key${x}=value${x}
+> done
+configmap/my-config created
+Error from server (AlreadyExists): configmaps "my-config" already exists
+Error from server (AlreadyExists): configmaps "my-config" already exists
+Error from server (Forbidden): configmaps "my-config" is forbidden: exceeded quota: project-quota, requested: configmaps=1, used: configmaps=3, limited: configmaps=3
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "schedule-limit".
+[student@workstation ~]$ oc adm create-bootstrap-project-template -o yaml > /tmp/project-template.yaml
+[student@workstation ~]$ vi /tmp/project-template.yaml 
+[student@workstation ~]$ oc create -f /tmp/project-template.yaml -n openshift-config
+template.template.openshift.io/project-request created
+[student@workstation ~]$ oc edit projects.config.openshift.io/cluster
+project.config.openshift.io/cluster edited
+[student@workstation ~]$ watch oc get pods -n openshift-apiserver
+[student@workstation ~]$ oc new-project template-test
+Now using project "template-test" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc get resourcequotas,limitranges
+NAME                                AGE   REQUEST                   LIMIT
+resourcequota/template-test-quota   16s   cpu: 0/3, memory: 0/10G   
+
+NAME                              CREATED AT
+limitrange/template-test-limits   2021-09-24T18:34:59Z
+[student@workstation ~]$ oc delete project schedule-limit
+project.project.openshift.io "schedule-limit" deleted
+[student@workstation ~]$ oc delete project template-test
+project.project.openshift.io "template-test" deleted
+[student@workstation ~]$ lab schedule-limit finish
+
+Completing Guided Exercise: Limiting Resource Usage by an Application
+
+ · Removing project template 'template.template.openshift.io/pr
+   oject-request'..............................................  SUCCESS
+ · Reverting the cluster to use the default project template...  SUCCESS
+ · Removing /tmp/project-template.yaml.........................  SUCCESS
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ 
+[student@workstation ~]$ lab schedule-scale start
+
+Checking prerequisites for Guided Exercise: Scaling an Application
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+ Checking for conflicts with existing OpenShift projects:
+ · The 'schedule-scale' project is absent......................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Scaling an Application
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+ Preparing the student's cluster:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project schedule-scale
+Now using project "schedule-scale" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ vim ~/DO280/labs/schedule-scale/loadtest.yaml
+[student@workstation ~]$ oc create --save-config -f ~/DO280/labs/schedule-scale/loadtest.yaml
+deployment.apps/loadtest created
+service/loadtest created
+route.route.openshift.io/loadtest created
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS              RESTARTS   AGE
+loadtest-978ccb589-xns7b   0/1     ContainerCreating   0          3s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-xns7b   1/1     Running   0          16s
+[student@workstation ~]$ oc describe pod/loadtest-5f9565dbfb-jm9md | grep -A2 -E "Limits|Requests"
+Error from server (NotFound): pods "loadtest-5f9565dbfb-jm9md" not found
+[student@workstation ~]$ oc describe pod/loadtest-978ccb589-xns7b | grep -A2 -E "Limits|Requests"
+    Limits:
+      cpu:     100m
+      memory:  100Mi
+    Requests:
+      cpu:        25m
+      memory:     25Mi
+[student@workstation ~]$ oc scale --replicas 5 deployment/loadtest
+deployment.apps/loadtest scaled
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS              RESTARTS   AGE
+loadtest-978ccb589-chpnd   0/1     ContainerCreating   0          12s
+loadtest-978ccb589-pzx69   0/1     ContainerCreating   0          12s
+loadtest-978ccb589-t4j5r   1/1     Running             0          12s
+loadtest-978ccb589-xns7b   1/1     Running             0          108s
+loadtest-978ccb589-zgmnc   0/1     ContainerCreating   0          12s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS              RESTARTS   AGE
+loadtest-978ccb589-chpnd   0/1     ContainerCreating   0          19s
+loadtest-978ccb589-pzx69   0/1     ContainerCreating   0          19s
+loadtest-978ccb589-t4j5r   1/1     Running             0          19s
+loadtest-978ccb589-xns7b   1/1     Running             0          115s
+loadtest-978ccb589-zgmnc   0/1     ContainerCreating   0          19s
+[student@workstation ~]$ oc get pods -w
+NAME                       READY   STATUS              RESTARTS   AGE
+loadtest-978ccb589-chpnd   0/1     ContainerCreating   0          24s
+loadtest-978ccb589-pzx69   0/1     ContainerCreating   0          24s
+loadtest-978ccb589-t4j5r   1/1     Running             0          24s
+loadtest-978ccb589-xns7b   1/1     Running             0          2m
+loadtest-978ccb589-zgmnc   0/1     ContainerCreating   0          24s
+loadtest-978ccb589-pzx69   1/1     Running             0          30s
+loadtest-978ccb589-zgmnc   1/1     Running             0          31s
+loadtest-978ccb589-chpnd   1/1     Running             0          31s
+^C[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Running   0          37s
+loadtest-978ccb589-pzx69   1/1     Running   0          37s
+loadtest-978ccb589-t4j5r   1/1     Running   0          37s
+loadtest-978ccb589-xns7b   1/1     Running   0          2m13s
+loadtest-978ccb589-zgmnc   1/1     Running   0          37s
+[student@workstation ~]$ oc scale --replicas 1 deployment/loadtest
+deployment.apps/loadtest scaled
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          62s
+loadtest-978ccb589-pzx69   1/1     Running       0          62s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          62s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m38s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          62s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          64s
+loadtest-978ccb589-pzx69   1/1     Running       0          64s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          64s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m40s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          64s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          65s
+loadtest-978ccb589-pzx69   1/1     Running       0          65s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          65s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m41s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          65s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          66s
+loadtest-978ccb589-pzx69   1/1     Running       0          66s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          66s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m42s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          66s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          67s
+loadtest-978ccb589-pzx69   1/1     Running       0          67s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          67s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m43s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          67s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          68s
+loadtest-978ccb589-pzx69   1/1     Running       0          68s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          68s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m44s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          68s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          69s
+loadtest-978ccb589-pzx69   1/1     Running       0          69s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          69s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m45s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          69s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          70s
+loadtest-978ccb589-pzx69   1/1     Running       0          70s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          70s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m46s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          70s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   1/1     Terminating   0          71s
+loadtest-978ccb589-pzx69   1/1     Running       0          71s
+loadtest-978ccb589-t4j5r   1/1     Terminating   0          71s
+loadtest-978ccb589-xns7b   1/1     Terminating   0          2m47s
+loadtest-978ccb589-zgmnc   1/1     Terminating   0          71s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS        RESTARTS   AGE
+loadtest-978ccb589-chpnd   0/1     Terminating   0          86s
+loadtest-978ccb589-pzx69   1/1     Running       0          86s
+loadtest-978ccb589-xns7b   0/1     Terminating   0          3m2s
+loadtest-978ccb589-zgmnc   0/1     Terminating   0          86s
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-pzx69   1/1     Running   0          94s
+[student@workstation ~]$ oc autoscale deployment/loadtest --min 2 --max 10 --cpu-percent 50
+horizontalpodautoscaler.autoscaling/loadtest autoscaled
+[student@workstation ~]$ watch oc get hpa/loadtest
+[student@workstation ~]$ oc get route/loadtest
+NAME       HOST/PORT                                       PATH   SERVICES   PORT   TERMINATION   WILDCARD
+loadtest   loadtest-schedule-scale.apps.ocp4.example.com          loadtest   8080                 None
+[student@workstation ~]$ curl -X GET http://loadtest-schedule-scale.apps.ocp4.example.com/api/loadtest/v1/cpu/1
+curl: (52) Empty reply from server
+[student@workstation ~]$ oc new-app --name scaling --docker-image quay.io/redhattraining/scaling:v1.0
+--> Found container image 4e17b8d (22 months old) from quay.io for "quay.io/redhattraining/scaling:v1.0"
+
+    Apache 2.4 with PHP 7.2 
+    ----------------------- 
+    PHP 7.2 available as container is a base platform for building and running various PHP 7.2 applications and frameworks. PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers to write dynamically generated web pages. PHP also offers built-in database integration for several commercial and non-commercial database management systems, so writing a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding is probably as a replacement for CGI scripts.
+
+    Tags: builder, php, php72, rh-php72
+
+    * An image stream tag will be created as "scaling:v1.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "scaling" created
+    deployment.apps "scaling" created
+    service "scaling" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/scaling' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc expose svc/scaling
+route.route.openshift.io/scaling exposed
+[student@workstation ~]$ oc scale --replicas 3 deployment/scaling
+deployment.apps/scaling scaled
+[student@workstation ~]$ oc get pods -o wide -l deployment=scaling
+NAME                       READY   STATUS              RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+scaling-56677c776c-bkjz5   1/1     Running             0          52s   10.8.0.164   master01   <none>           <none>
+scaling-56677c776c-rcrkj   0/1     ContainerCreating   0          12s   <none>       master03   <none>           <none>
+scaling-56677c776c-vm6bn   0/1     ContainerCreating   0          12s   <none>       master02   <none>           <none>
+[student@workstation ~]$ oc get pods -o wide -l deployment=scaling
+NAME                       READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+scaling-56677c776c-bkjz5   1/1     Running   0          67s   10.8.0.164    master01   <none>           <none>
+scaling-56677c776c-rcrkj   1/1     Running   0          27s   10.10.1.213   master03   <none>           <none>
+scaling-56677c776c-vm6bn   1/1     Running   0          27s   10.9.1.37     master02   <none>           <none>
+[student@workstation ~]$ oc get route/scaling
+NAME      HOST/PORT                                      PATH   SERVICES   PORT       TERMINATION   WILDCARD
+scaling   scaling-schedule-scale.apps.ocp4.example.com          scaling    8080-tcp                 None
+[student@workstation ~]$ ~/DO280/labs/schedule-scale/curl-route.sh
+     32 Server IP: 10.10.1.213 
+     34 Server IP: 10.8.0.164 
+     34 Server IP: 10.9.1.37 
+[student@workstation ~]$ ~/DO280/labs/schedule-scale/curl-route.sh
+     34 Server IP: 10.10.1.213 
+     34 Server IP: 10.8.0.164 
+     32 Server IP: 10.9.1.37 
+[student@workstation ~]$ oc get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-2t2h7   1/1     Running   0          4m13s
+loadtest-978ccb589-bgvvs   1/1     Running   0          4m13s
+loadtest-978ccb589-hd55s   1/1     Running   0          4m28s
+loadtest-978ccb589-p6b2x   1/1     Running   0          4m13s
+loadtest-978ccb589-pzx69   1/1     Running   0          11m
+loadtest-978ccb589-qdxf7   1/1     Running   0          4m13s
+loadtest-978ccb589-vm2sm   1/1     Running   0          4m29s
+loadtest-978ccb589-xm2fx   1/1     Running   0          9m30s
+scaling-56677c776c-bkjz5   1/1     Running   0          3m11s
+scaling-56677c776c-rcrkj   1/1     Running   0          2m31s
+scaling-56677c776c-vm6bn   1/1     Running   0          2m31s
+[student@workstation ~]$ oc get pods -w
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-2t2h7   1/1     Running   0          4m18s
+loadtest-978ccb589-bgvvs   1/1     Running   0          4m18s
+loadtest-978ccb589-hd55s   1/1     Running   0          4m33s
+loadtest-978ccb589-p6b2x   1/1     Running   0          4m18s
+loadtest-978ccb589-pzx69   1/1     Running   0          11m
+loadtest-978ccb589-qdxf7   1/1     Running   0          4m18s
+loadtest-978ccb589-vm2sm   1/1     Running   0          4m34s
+loadtest-978ccb589-xm2fx   1/1     Running   0          9m35s
+scaling-56677c776c-bkjz5   1/1     Running   0          3m16s
+scaling-56677c776c-rcrkj   1/1     Running   0          2m36s
+scaling-56677c776c-vm6bn   1/1     Running   0          2m36s
+[student@workstation ~]$ oc get pods -w
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-2t2h7   1/1     Running   0          5m28s
+loadtest-978ccb589-bgvvs   1/1     Running   0          5m28s
+loadtest-978ccb589-hd55s   1/1     Running   0          5m43s
+loadtest-978ccb589-p6b2x   1/1     Running   0          5m28s
+loadtest-978ccb589-pzx69   1/1     Running   0          12m
+loadtest-978ccb589-qdxf7   1/1     Running   0          5m28s
+loadtest-978ccb589-vm2sm   1/1     Running   0          5m44s
+loadtest-978ccb589-xm2fx   1/1     Running   0          10m
+scaling-56677c776c-bkjz5   1/1     Running   0          4m26s
+scaling-56677c776c-rcrkj   1/1     Running   0          3m46s
+scaling-56677c776c-vm6bn   1/1     Running   0          3m46s
+[student@workstation ~]$ oc get pods -w
+NAME                       READY   STATUS    RESTARTS   AGE
+loadtest-978ccb589-pzx69   1/1     Running   0          19m
+loadtest-978ccb589-qdxf7   1/1     Running   0          11m
+scaling-56677c776c-bkjz5   1/1     Running   0          10m
+scaling-56677c776c-rcrkj   1/1     Running   0          10m
+scaling-56677c776c-vm6bn   1/1     Running   0          10m
+[student@workstation ~]$ oc delete project schedule-scale
+project.project.openshift.io "schedule-scale" deleted
+[student@workstation ~]$ lab schedule-scale finish
+
+Completing Guided Exercise: Scaling an Application
+
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ 
+[student@workstation ~]$ lab console-admin start
+
+Checking prerequisites for Guided Exercise: Performing Cluster Administration
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Performing Cluster Administration
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc whoami --show-console
+https://console-openshift-console.apps.ocp4.example.com
+[student@workstation ~]$ htpasswd -n -b tester redhat
+tester:$apr1$RCrV9lvY$5DQmyPeiBiYyVaY6LFj6G.
+
+[student@workstation ~]$ lab console-admin finish
+
+Completing Guided Exercise: Performing Cluster Administration
+
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab console-workloads start
+
+Checking prerequisites for Guided Exercise: Managing Workloads and Operators
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Managing Workloads and Operators
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+ Preparing the student's cluster:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc whoami --show-console
+https://console-openshift-console.apps.ocp4.example.com
+[student@workstation ~]$ cat console-openshift-console.apps.ocp4.example.com
+cat: console-openshift-console.apps.ocp4.example.com: No such file or directory
+[student@workstation ~]$ cat ~/DO280/labs/console-workloads/
+cat: /home/student/DO280/labs/console-workloads/: Is a directory
+[student@workstation ~]$ deployment.yaml
+bash: deployment.yaml: command not found...
+[student@workstation ~]$ cat ~/DO280/labs/console-workloads/deployment.yaml 
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: books
+  namespace: console-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: books
+  template:
+    metadata:
+      labels:
+        app: books
+    spec:
+      containers:
+        - name: books
+          image: 'quay.io/redhattraining/books:v0.9'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+          env:
+            - name: DB_HOST
+              value: database.console-apps.svc.cluster.local
+            - name: DB_PORT
+              value: '5432'
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_NAME
+              value: postgres
+[student@workstation ~]$ lab console-workloads finish
+
+Completing Guided Exercise: Managing Workloads and Operators
+
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab console-metrics start
+
+Checking prerequisites for Guided Exercise: Examining Cluster Metrics
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Examining Cluster Metrics
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+ Preparing the student's cluster:
+ · Download exercise files.....................................  SUCCESS
+ · Ensuring ResourceQuota 'quota' exists.......................  SUCCESS
+ · Ensuring LimitRange 'limit-range' exists....................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc whoami --show-console
+https://console-openshift-console.apps.ocp4.example.com
+[student@workstation ~]$ ~/DO280/labs/console-metrics/load.sh 
+Polling http://books-console-apps.apps.ocp4.example.com/leak every 0 seconds 200 times...
+Polling http://books-console-apps.apps.ocp4.example.com/leak every 0.1 seconds 300 times...
+Polling http://books-console-apps.apps.ocp4.example.com/leak every 0.2 seconds 500 times...
+Polling http://books-console-apps.apps.ocp4.example.com/leak every 0.5 seconds 300 times...
+[student@workstation ~]$ lab console-metrics finish
+
+Completing Guided Exercise: Examining Cluster Metrics
+
+ · Remove group 'project-team'.................................  SUCCESS
+ · Delete HTPasswd entry for 'tester'..........................  SUCCESS
+ · Update the 'localusers' secret data.........................  SUCCESS
+ · Remove exercise files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab console-review start
+
+Checking prerequisites for Lab: Managing a Cluster with the Web Console
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+
+Setting up the classroom for Lab: Managing a Cluster with the Web Console
+
+ Restoring authentication settings to installation defaults:
+ · Removing 'cluster-admin' role from the 'admin' user.........  SUCCESS
+ · Remove HTPasswd secret: 'localusers'........................  SUCCESS
+ · Remove all configured Identity Providers....................  SUCCESS
+ · Remove all existing users...................................  SUCCESS
+ · Remove all existing identities..............................  SUCCESS
+ · Create HTPasswd entry for 'admin'...........................  SUCCESS
+ · Create HTPasswd entry for 'leader'..........................  SUCCESS
+ · Create HTPasswd entry for 'developer'.......................  SUCCESS
+ · Create HTPasswd secret: 'localusers'........................  SUCCESS
+ · Add HTPasswd IdP............................................  SUCCESS
+ · Assigning the 'cluster-admin' role to the 'admin' user......  SUCCESS
+ · Pause for creation of first oauth pod.......................  SUCCESS
+ · Wait up to 1 minute for oauth pod containers to be ready....  SUCCESS
+ · Pause for creation of second oauth pod......................  SUCCESS
+ · Delete all previous users...................................  SUCCESS
+ · Delete all previous identities..............................  SUCCESS
+ · Pause 5 seconds before validating authentication............  SUCCESS
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+ Preparing the student's cluster:
+ · Download exercise files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+(failed reverse-i-search)`': watch^Cc get pods -n openshift-apiserver
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc whoami --show-console
+https://console-openshift-console.apps.ocp4.example.com
+[student@workstation ~]$ htpasswd -n -b dba redhat
+dba:$apr1$PRNPRa01$.3K0Al2cyCgIuyN2J.c46/
+
+[student@workstation ~]$ htpasswd -n -b tester redhat
+tester:$apr1$AyXopqF7$i9mONo3BfCTvhtGj47QCY/
+
+[student@workstation ~]$ lab console-review grade
+
+Grading the student's work for Lab: Managing a Cluster with the Web Console
+
+ · Verifying user from secret: dba.............................  PASS
+ · Verifying user from secret: tester..........................  PASS
+ · Group 'app-team' exists.....................................  PASS
+ · Group 'app-team' includes correct users.....................  PASS
+ · Project 'console-review' exists.............................  PASS
+ · RoleBinding binds 'tester' user to 'view' role in 'console-r
+   eview' project..............................................  PASS
+ · RoleBinding binds 'app-team' group to 'edit' role...........  PASS
+ · ResourceQuota exists........................................  PASS
+ · The 'postgresql-operator-dev4devs-com' subscription exists i
+   n the 'console-review' namespace............................  PASS
+ · RoleBinding binds 'dba' user to 'view' role.................  PASS
+ · An instance of the PostgreSQL Database exists in the 'consol
+   e-review' namespace.........................................  PASS
+ · Deployment 'exoplanets' exists..............................  PASS
+ · Service 'exoplanets' exists.................................  PASS
+ · Route 'exoplanets' exists for the 'exoplanets' application..  PASS
+ · Application 'exoplanets' responds with 200 OK...............  PASS
+
+Overall exercise grade.........................................  PASS
+
+[student@workstation ~]$ lab console-review finish
+
+Completing Lab: Managing a Cluster with the Web Console
+
+ · Remove dba rolebinding from openshift-operators.............  SUCCESS
+ · Remove group 'app-team'.....................................  SUCCESS
+ · Delete HTPasswd entry for 'dba'.............................  SUCCESS
+ · Delete HTPasswd entry for 'tester'..........................  SUCCESS
+ · Update the 'localusers' secret data.........................  SUCCESS
+ · Remove user 'dba'...........................................  SUCCESS
+ · Remove identity 'localusers:dba'............................  SUCCESS
+ · Delete OpenShift project 'console-review'...................  SUCCESS
+ · Wait for project 'console-review' to be gone................  SUCCESS
+ · Remove exercise files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ 
+
